@@ -5,26 +5,30 @@ import os
 from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtWidgets import QDialog
 from PyQt5.uic import loadUi
-import objBrowser
+import os
+import sys
 
-class objBrowserCls(QDialog):
+
+class objBrowserCls(QtWidgets.QMainWindow):
 
 	def __init__(self, parent=None):
 		self.parent = parent
-		super(objBrowserCls, self).__init__(parent)
-		self.uiName=objBrowser.__file__.replace(".py",".ui")
-		self.setupUI(self.uiName)
-		self.parent.pylib.say("Loaded!")
+		QtWidgets.QMainWindow.__init__(self)		
+		
+		if(__name__=='__main__'):
+			import objBrowser
+			self.uiFile = objBrowser.__file__
+		else:			
+			self.uiFile = sys.modules[__name__].__file__
+		
+		self.uiFile = self.uiFile.replace(".py",".ui")
+		loadUi(self.uiFile, self)
+		
+		self.setWindowTitle(self.__class__.__name__)
 		self.lineEdit.setText("self.parent")
 		self.skipBuiltInsObj = False
 		
 		self.objInspectSpl()
-
-	def setupUI(self, uiFile):
-		prepath = os.path.abspath(os.curdir)
-		prepath = os.path.join(prepath, "devPlugs")
-		loadUi(uiFile, self)
-		self.setWindowTitle(self.__class__.__name__)
 
 	def skipBuiltIns(self, args):
 		self.skipBuiltInsObj = args
@@ -182,7 +186,8 @@ class objBrowserCls(QDialog):
 				item.addChild(prn.item)
 
 if '__main__' == __name__:
-	if(not hasattr(dev,'objBrowserClsObj') or dev.devMode):	   
-		dev.objBrowserClsObj = objBrowserCls(dev)
+ 
+	dev.objBrowserClsObj = objBrowserCls(dev)
+	
 	dev.objBrowserClsObj.show()
 	#dev.objBrowserClsObj._raise()
