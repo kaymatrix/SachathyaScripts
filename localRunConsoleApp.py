@@ -7,3 +7,4 @@ import sachathya
 dev = sachathya.core()
 
 
+import firstScript

@@ -185,9 +185,7 @@ class objBrowserCls(QtWidgets.QMainWindow):
 				setattr(prn.item, 'dx', eachMember[1])
 				item.addChild(prn.item)
 
-if '__main__' == __name__:
- 
-	dev.objBrowserClsObj = objBrowserCls(dev)
-	
+if '__main__' == __name__: 
+	dev.objBrowserClsObj = objBrowserCls(dev)	
 	dev.objBrowserClsObj.show()
 	#dev.objBrowserClsObj._raise()

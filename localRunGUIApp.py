@@ -7,13 +7,15 @@ from PyQt5 import QtCore, QtGui, Qsci, QtWidgets
 import sys
 import sachathya
 
-from guiApp import objBrowser
 
 dev = sachathya.core()
 dev.schQtApp = QtWidgets.QApplication(sys.argv)
 
+#----------------------------------
+from guiApp import objBrowser
 dev.obj = objBrowser.objBrowserCls(dev)
 dev.obj.show()
+#----------------------------------
 
 wins = dev.schQtApp.topLevelWidgets()
 if len(wins): wins[0].closeEvent = dev.schDoInstanceLastAction                
