@@ -6,22 +6,14 @@ from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtWidgets import QDialog
 from PyQt5.uic import loadUi
 import os
-import sys
-
+import sys
 
 class objBrowserCls(QtWidgets.QMainWindow):
 
 	def __init__(self, parent=None):
 		self.parent = parent
 		QtWidgets.QMainWindow.__init__(self)		
-		
-		if(__name__=='__main__'):
-			import objBrowser
-			self.uiFile = objBrowser.__file__
-		else:			
-			self.uiFile = sys.modules[__name__].__file__
-		
-		self.uiFile = self.uiFile.replace(".py",".ui")
+		self.uiFile = os.path.abspath('objBrowser.ui')
 		loadUi(self.uiFile, self)
 		
 		self.setWindowTitle(self.__class__.__name__)
@@ -185,7 +177,7 @@ class objBrowserCls(QtWidgets.QMainWindow):
 				setattr(prn.item, 'dx', eachMember[1])
 				item.addChild(prn.item)
 
-if '__main__' == __name__: 
-	dev.objBrowserClsObj = objBrowserCls(dev)	
-	dev.objBrowserClsObj.show()
-	#dev.objBrowserClsObj._raise()
+
+dev.objBrowserClsObj = objBrowserCls(dev)	
+
+dev.objBrowserClsObj.show()

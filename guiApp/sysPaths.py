@@ -8,32 +8,24 @@ from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtWidgets import QDialog
 from PyQt5.uic import loadUi
 import sys,os
-import sysPaths as sps
+import sysPaths
 
-class sysPaths(QDialog):
-	'''
-	classdocs
-	'''
+class sysPathsCls(QtWidgets.QMainWindow):
 
 	def __init__(self,parent):
 		'''
 		Constructor
 		'''
-		# Parent is DEV <DEVCONSOLEPLUG>
-		self.parent = parent
-		self.uiFile=sps.__file__.replace(".py",".ui")
-		super(sysPaths, self).__init__(QtWidgets())
-		print ("Loaded!")
-		self.setupUI(self.uiFile)
+		QtWidgets.QMainWindow.__init__(self)		
+		self.uiFile=sysPaths.__file__.replace(".py",".ui")
+
+		loadUi(self.uiFile, self)
+		self.setWindowTitle(self.__class__.__name__.replace('Cls',''))
+
 		for path in sys.path:
 			itm = QtWidgets.QListWidgetItem(path)
 			self.listWidget.addItem(itm)
-		self.show()
-
-	def setupUI(self, uiFile):
-		loadUi(uiFile, self)
-		self.setWindowTitle(self.__class__.__name__)		
 	
 if '__main__' == __name__:
-	dev.sysPathsCls = sysPaths(dev)
-	dev.sysPathsCls.show()	
+	dev.sysPathsObj = sysPathsCls(dev)
+	dev.sysPathsObj.show()

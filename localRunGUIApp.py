@@ -7,13 +7,12 @@ from PyQt5 import QtCore, QtGui, Qsci, QtWidgets
 import sys
 import sachathya
 
-
 dev = sachathya.core()
 dev.schQtApp = QtWidgets.QApplication(sys.argv)
 
 #----------------------------------
-from guiApp import objBrowser
-dev.obj = objBrowser.objBrowserCls(dev)
+from guiApp import sysPaths
+dev.obj = sysPaths.sysPathsCls(dev)
 dev.obj.show()
 #----------------------------------
 
