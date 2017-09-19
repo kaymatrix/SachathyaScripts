@@ -1,4 +1,4 @@
-#For DevConsole
+#For Sachathya
 import inspect
 import os
 
@@ -6,18 +6,19 @@ from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtWidgets import QDialog
 from PyQt5.uic import loadUi
 import os
-import sys
+import sys
+import objBrowser
 
 class objBrowserCls(QtWidgets.QMainWindow):
 
 	def __init__(self, parent=None):
-		self.parent = parent
+		self.sch = parent
 		QtWidgets.QMainWindow.__init__(self)		
-		self.uiFile = os.path.abspath('objBrowser.ui')
+		self.uiFile=objBrowser.__file__.replace(".py",".ui")
 		loadUi(self.uiFile, self)
 		
 		self.setWindowTitle(self.__class__.__name__)
-		self.lineEdit.setText("self.parent")
+		self.lineEdit.setText("sch")
 		self.skipBuiltInsObj = False
 		
 		self.objInspectSpl()
@@ -33,7 +34,7 @@ class objBrowserCls(QtWidgets.QMainWindow):
 		self.objInspectDblClick(arg)
 
 	def itemClicked(self, *arg):
-		self.objInspectClick(arg)
+		self.objInspectClick(arg)	
 
 	def objInspectSpl(self):
 		val = str(self.lineEdit.text())
@@ -80,6 +81,19 @@ class objBrowserCls(QtWidgets.QMainWindow):
 				setattr(self.item, 'dx', eachMember[1])
 				self.treeWidget.addTopLevelItem(self.item)
 
+	def getNavPath(self, itm):
+		citm = itm
+		path = []
+		
+		while type(citm)!=type(None):
+			path.append(citm.text(0))
+			citm = citm.parent()
+		path.append(str(self.lineEdit.text()).strip())
+					
+		rpath = path[::-1]
+		print('\nObject Path:')
+		print('.'.join(rpath))
+		
 	def objInspectClick(self, *arg):
 		arg = arg[0]
 		if len(arg) > 0:
@@ -88,6 +102,7 @@ class objBrowserCls(QtWidgets.QMainWindow):
 			nam = str(itm.text(0))
 			tp = str(itm.text(1))
 			obj = getattr(itm, 'dx')
+			self.getNavPath(itm)
 
 			try:
 				doc = inspect.getdoc(obj)
@@ -177,7 +192,8 @@ class objBrowserCls(QtWidgets.QMainWindow):
 				setattr(prn.item, 'dx', eachMember[1])
 				item.addChild(prn.item)
 
-
-dev.objBrowserClsObj = objBrowserCls(dev)	
-
-dev.objBrowserClsObj.show()
+if '__main__' == __name__:
+	if(not hasattr(sch, 'objBrowserObj') or sch.devMode):
+		sch.objBrowserObj = objBrowserCls(sch)	
+	sch.objBrowserObj.show()
+	sch.objBrowserObj.raise_()
