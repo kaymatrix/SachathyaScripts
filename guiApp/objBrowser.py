@@ -14,10 +14,11 @@ class objBrowserCls(QtWidgets.QMainWindow):
 	def __init__(self, parent=None):
 		self.sch = parent
 		QtWidgets.QMainWindow.__init__(self)		
-		self.uiFile=objBrowser.__file__.replace(".py",".ui")
+		self.uiFile=objBrowser.__file__.replace(".py",".ui")
+
 		loadUi(self.uiFile, self)
 		
-		self.setWindowTitle(self.__class__.__name__)
+		self.setWindowTitle(self.__class__.__name__.replace('Cls',''))
 		self.lineEdit.setText("sch")
 		self.skipBuiltInsObj = False
 		

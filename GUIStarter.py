@@ -1,3 +1,5 @@
+#For Sachathya
+
 from PyQt5 import QtCore, QtGui, Qsci, QtWidgets,  Qt
 import sys,os
 
@@ -25,7 +27,7 @@ class SchGUIStarter():
         self.schGUIObj=self.sch.schGUIObj
         self.schQtApp=self.sch.schQtApp
         self.ttls=self.sch.ttls
-        self.cmttls=self.sch.schGUIObj.cmttls
+        self.cmttls=kmxQtCommonTools.CommonTools()
                 
     def initialize(self):
         #Dev Mode
@@ -33,12 +35,11 @@ class SchGUIStarter():
         
         #Defaults
         self.toolButtonStyle = QtCore.Qt.ToolButtonTextBesideIcon
-        
-               
+                       
         #Tray setup
         if hasattr(self.sch,'schTray'):
             self.sch.schTray.trayKiller()
-        self.sch.schTray = kmxQtTray.Tray(self.sch.schGUIObj, self.doTrayClick, self.doTrayClick)
+        self.sch.schTray = kmxQtTray.Tray(self.sch.schGUIObj, self.doTrayClick, self.doTrayClick, 'user_samurai.png')
         self.sch.schTray.setupTray()        
         self.schActTglEditor = self.sch.schTray.trayMenuUpdate('Editor')
         self.schActTglEditor.setCheckable(True)
@@ -46,7 +47,7 @@ class SchGUIStarter():
         self.schActCleanOutput = self.sch.schTray.trayMenuUpdate('Clean Output')
         self.sch.schTray.trayMenuUpdate('|')
         self.schActQuit = self.sch.schTray.trayMenuUpdate('Quit')
-
+                
         #Disable toolbar
         self.sch.schGUIObj.QuickTools.setVisible(0)
         self.sch.schGUIObj.QuickTools.setToolButtonStyle(self.toolButtonStyle)
@@ -65,9 +66,11 @@ class SchGUIStarter():
         self.customToolSetup()
         
         #Toggle Editor
-        self.toggleEditor()
+        #self.toggleEditor()
         
         #setupIcons
+        self.sch.schGUIObj.setWindowIcon(self.cmttls.getIcon('user_samurai.png'))
+        self.cmttls.setIconForItem(self.sch.schGUIObj,'user_samurai.png')
         self.cmttls.setIconForItem(self.schActTglEditor, 'document_import.png')
         self.cmttls.setIconForItem(self.schActCleanOutput, 'broom.png')
         self.cmttls.setIconForItem(self.schActQuit, 'door_out.png')
@@ -75,17 +78,29 @@ class SchGUIStarter():
         #CustomCleanup
         self.sch.customCleanUp = self.doCustomCleanup
         
+        #Certificate
+        os.environ["REQUESTS_CA_BUNDLE"] = os.path.join(os.getcwd(),'certifi', 'cacert.pem')
+        print(os.environ["REQUESTS_CA_BUNDLE"])        
+        
         #Ready!!!
         self.sch.schTray.trayMessage('Sachathya','Ready')
     
     def customToolSetup(self):
-        self.tool = self.addCustomTools('ObjBrowser')
-        self.cmttls.setIconForItem(self.tool, 'tablets.png')        
-        self.tool = self.addCustomTools('SysPaths')
-        self.cmttls.setIconForItem(self.tool, 'source_code.png')
-        self.addCustomTools('|')
-        tool = self.addCustomTools('SysPathsMore')
 
+		#http://dev.vizuina.com/farmfresh/
+        self.customToolsList = []
+        self.addCustomTools('ObjBrowser','tablets.png','F:\\PythonWorkspace\\SachathyaScripts\\guiApp\\objBrowser.py')
+        self.addCustomTools('SysPaths','source_code.png','F:\\PythonWorkspace\\SachathyaScripts\\guiApp\\sysPaths.py')
+        self.addCustomTools('|')                
+        self.addCustomTools('PathConv','document_valid.png','F:\\PythonWorkspace\\SachathyaScripts\\myCommands\\pathslash.py')
+        self.addCustomTools('RemoveSpace','buttonbar.png','F:\\PythonWorkspace\\SachathyaScripts\\myCommands\\removespace.py')
+
+        self.addCustomTools('Show\\Hide','cargo.png','F:\\PythonWorkspace\\SachathyaScripts\\myCommands\\schShowHide.py')
+
+        self.addCustomTools('DevMode','chess_horse.png','F:\\PythonWorkspace\\SachathyaScripts\\myCommands\\devModeTgl.py')
+
+		
+        
     def doStartCustomTool(self, toolName):
         if(toolName==1):
             print('Tray right Click event is free')
@@ -95,14 +110,14 @@ class SchGUIStarter():
             print('Tray click event is free')
         elif(toolName==4):
             print('Tray middle click event is free')
-        elif(toolName == 'ObjBrowser'):
-            script = 'F:\\PythonWorkspace\\SachathyaScripts\\guiApp\\objBrowser.py'
-            self.doRunScript(script)
-        elif(toolName == 'SysPaths'):
-            script = 'F:\\PythonWorkspace\\SachathyaScripts\\guiApp\\sysPaths.py'
-            self.doRunScript(script)
         else:
-            print('Custom tool not found - ' + str(toolName))
+            for eachTools in self.customToolsList:
+                if(toolName == eachTools[0]):
+                    script = eachTools[2]
+                    if(script):
+                        self.doRunScript(script)
+                    else:
+                        print('No script linked to '+toolName)
 
     def doCustomCleanup(self):
         self.sch.schStandardIOObj.reset()
@@ -129,15 +144,19 @@ class SchGUIStarter():
         self.schActTglEditor.setChecked(n)
         self.sch.schGUIObj.mdiArea.parent().setVisible(n)
         self.sch.schGUIObj.mdiArea.setVisible(n)  
-    
-    def addCustomTools(self, toolName):
+
+    def addCustomTools(self, toolName, icon=None, script=None):
+        icon = icon if icon else 'draft.png'
         if toolName=='|':
             schActCustomTool = self.sch.schTray.trayMenuUpdate('|')
             self.schCustomTools.addSeparator()
         else:
             schActCustomTool = self.sch.schTray.trayMenuUpdate(toolName)
-            self.schCustomTools.addAction(schActCustomTool)
-        return schActCustomTool         
+            schActCustomTool.setData(QtCore.QVariant(str(script)))
+            self.cmttls.setIconForItem(schActCustomTool, icon)
+            self.customToolsList.append((toolName,icon,script))
+            self.schCustomTools.addAction(schActCustomTool)            
+        return schActCustomTool          
                            
 if (__name__=="__main__"):
     if(not hasattr(sch, 'schUserGUI') or sch.devMode):    

@@ -5,7 +5,9 @@ Created on Sep 2, 2017
 @author: npn
 '''
 import sachathya
-dev = sachathya.core()
+sch = sachathya.core(dummy=1)
 
+import temp.flaskServer
 
-import firstScript
+obj = temp.flaskServer.flaskServerCls(sch)
+obj.initialize()

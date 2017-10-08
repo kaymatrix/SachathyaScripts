@@ -8,15 +8,19 @@ from PyQt5 import QtCore, QtGui, Qsci, QtWidgets
 import sys
 import sachathya
 
-dev = sachathya.core()
-dev.schQtApp = QtWidgets.QApplication(sys.argv)
+sys.path.append('F:\\PythonWorkspace\\SachathyaScripts\\temp')
+import temp.HTTPBasedAppServer as tf
+
+
+sch = sachathya.core(dummy=1)
+sch.schQtApp = QtWidgets.QApplication(sys.argv)
+sch.schGUIObj = None
 
 #----------------------------------
-from guiApp import sysPaths
-dev.obj = sysPaths.sysPathsCls(dev)
-dev.obj.show()
+obj = tf.HTTPBasedAppServerCls(sch)
+obj.initialize()
 #----------------------------------
 
-wins = dev.schQtApp.topLevelWidgets()
-if len(wins): wins[0].closeEvent = dev.schDoInstanceLastAction                
-sys.exit(dev.schQtApp.exec_())
+wins = sch.schQtApp.topLevelWidgets()
+if len(wins): wins[0].closeEvent = sch.schDoInstanceLastAction                
+sys.exit(sch.schQtApp.exec_())

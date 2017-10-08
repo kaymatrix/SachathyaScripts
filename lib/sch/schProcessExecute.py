@@ -78,13 +78,13 @@ class schProcessExecuteCls():
 		if (not sip.isdeleted(self.qprocess)):
 			if self.qprocess.canReadLine():
 				QtWidgets.QApplication.processEvents()
-				self.processDisplay(str(self.qprocess.readAllStandardOutput().data().decode("utf-8")).replace('\r\n',''))			
+				self.processDisplay(str(self.qprocess.readAllStandardOutput().data().decode("utf-8")))			
 			
 	def processErrorOutput(self):
 		QtWidgets.QApplication.processEvents()
 		#print('Err:'+str(self.qprocess.errorString()))
 		if (not sip.isdeleted(self.qprocess)):
-			data = str(self.qprocess.readAllStandardError().data().decode("utf-8")).replace('\r\n','')
+			data = str(self.qprocess.readAllStandardError().data().decode("utf-8"))
 			#if data: self.processDisplay('\nError: '+data)
 			if data and self.displayErrors: self.processDisplay(data)
 
