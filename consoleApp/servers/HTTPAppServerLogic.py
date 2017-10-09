@@ -1,6 +1,4 @@
-'''
-#For DevConsole
-'''
+#For Sachathya
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 class httpRequestHandler(BaseHTTPRequestHandler):
@@ -24,6 +22,9 @@ class httpRequestHandler(BaseHTTPRequestHandler):
 		response=''
 		if (len(uri)>1):
 			fn = uri[1]
+			print(fn)
+			if (fn=='getxml'):
+				response = self.getXML()
 			if (fn=='add'):
 				param1=int(uri[2])
 				param2=int(uri[3])
@@ -38,3 +39,9 @@ class httpRequestHandler(BaseHTTPRequestHandler):
 				response = str(param1*param2)				
 			print(response)
 		self.setSuccessResponse(response)
+	
+	def getXML(self):
+		f = open('D:\\sample.xml','r')
+		data = f.read()
+		f.close()
+		return str(data)
