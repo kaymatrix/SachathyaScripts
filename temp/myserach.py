@@ -48,7 +48,15 @@ class myserachCls(QtWidgets.QMainWindow):
         print(dom.tag)
         
         d = bf.data(dom)
-        print(d['catalog']['book'][0][val]['$'])
+        price = []
+        for each in d['catalog']['book']:
+            price.append(int(each['price']['$']))
+        print(price)
+        
+        import pyqtgraph as pg
+        
+        pg.plot(price)
+           
         
         
         

@@ -66,7 +66,7 @@ class SchGUIStarter():
         self.customToolSetup()
         
         #Toggle Editor
-        #self.toggleEditor()
+        self.toggleEditor()
         
         #setupIcons
         self.sch.schGUIObj.setWindowIcon(self.cmttls.getIcon('user_samurai.png'))
@@ -98,6 +98,8 @@ class SchGUIStarter():
         self.addCustomTools('Show\\Hide','cargo.png','F:\\PythonWorkspace\\SachathyaScripts\\myCommands\\schShowHide.py')
 
         self.addCustomTools('DevMode','chess_horse.png','F:\\PythonWorkspace\\SachathyaScripts\\myCommands\\devModeTgl.py')
+        
+        self.addCustomTools('Search','folder.png', 'F:\\PythonWorkspace\\SachathyaScripts\\temp\\myserach.py')
 
 		
         
