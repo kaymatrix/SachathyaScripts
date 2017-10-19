@@ -132,31 +132,31 @@ if __name__ == '__main__':
 	if(not hasattr(sch, 'schLoadSaverObj') or sch.devMode):	
 		sch.schLoadSaverObj = schLoadSaverCls(sch)	
 		
-	self.ls = sch.schLoadSaverObj
+	sch.ls = sch.schLoadSaverObj
 	
-	self.ls.systemName = 'MySystem'
-	self.ls.systemNameShort = 'ms'
-	self.ls.saveFolder = '.\\msSettings'
-	self.ls.ext = '.ini'
+	sch.ls.systemName = 'MySystem'
+	sch.ls.systemNameShort = 'ms'
+	sch.ls.saveFolder = '.\\msSettings'
+	sch.ls.ext = '.ini'
 	
 	#Non - GUI Style - Save 
-	self.ls.objToSave = ['item5','item4']
-	self.ls.save('save3')
+	sch.ls.objToSave = ['item5','item4']
+	sch.ls.save('save3')
 	
 	#Non - GUI Style - Load
-	self.ls.load('saveOne')
-	data = self.ls.getObject()
+	sch.ls.load('saveOne')
+	data = sch.ls.getObject()
 	print(data)
 	
 	#-----
 	
 	#GUI Style - Save
-	self.ls.objToSave = ['itemxxx1','itemccc2']
+	sch.ls.objToSave = ['itemxxx1','itemccc2']
 	#self.ls.showLoadSave()	
 
 	
 	#GUI Style - load
-	self.ls.objToSave = ['itettrtretetm1','item2ccccccccccvvvvvv']
-	self.ls.showLoadSave()
-	data = self.ls.getObject()
+	sch.ls.objToSave = ['itettrtretetm1','item2ccccccccccvvvvvv']
+	sch.ls.showLoadSave()
+	data = sch.ls.getObject()
 	print(data)
